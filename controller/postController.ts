@@ -5,4 +5,9 @@ async function getPosts(n = 5, sub = undefined) {
   return db.getPosts(n, sub);
 }
 
-export { getPosts };
+// Get a post from the database
+async function getPost(id: number) {
+  return db.getPost(id);
+}
+
+export { getPosts, getPost };

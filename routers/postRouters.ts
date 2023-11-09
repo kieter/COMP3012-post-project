@@ -16,11 +16,16 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 
 router.post("/create", ensureAuthenticated, async (req, res) => {
   // ⭐ TODO
+  res.redirect("/");
 });
 
 router.get("/show/:postid", async (req, res) => {
-  // ⭐ TODO
-  res.render("individualPost");
+  const post = await database.getPost(req.params.postid);
+
+  //If not post found redirect to home
+  if (!post) return res.redirect("/");
+
+  res.render("individualPost", post);
 });
 
 router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
