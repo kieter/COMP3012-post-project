@@ -10,4 +10,15 @@ async function getPost(id: number) {
   return db.getPost(id);
 }
 
-export { getPosts, getPost };
+// Get a post from the database
+async function addPost(
+  title: string,
+  link: string,
+  creator: number,
+  description: string,
+  subgroup: string
+) {
+  return db.addPost(title, link, creator, description, subgroup);
+}
+
+export { getPosts, getPost, addPost };

@@ -15,8 +15,22 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 });
 
 router.post("/create", ensureAuthenticated, async (req, res) => {
-  // ⭐ TODO
-  res.redirect("/");
+  //Get body data
+  const { title, link, sub: subgroup, description } = req.body;
+  //Get user data
+  const user = await req.user;
+
+  //Create Post
+  const newPost = await database.addPost(
+    title,
+    link,
+    user.id,
+    description,
+    subgroup
+  );
+
+  //Redirect to the new Post once created
+  res.redirect(`show/${newPost.id}`);
 });
 
 router.get("/show/:postid", async (req, res) => {
