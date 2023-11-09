@@ -1,0 +1,25 @@
+<div>
+  <h1>Create a New Post</h1>
+  <form action="/posts/create" method="POST">
+    <label for="title">Title<span>*</span>:</label>
+    <input type="text" id="title" name="title" required /><br /><br />
+
+    <label for="link">Link:</label>
+    <input type="url" id="link" name="link" /><br /><br />
+
+    <label for="sub">Sub<span>*</span>:</label>
+    <input type="text" id="sub" name="sub" required /><br /><br />
+
+    <label for="description">Description<span>*</span>:</label><br />
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      cols="50"
+      required
+    ></textarea
+    ><br /><br />
+
+    <input type="submit" value="Create Post" />
+  </form>
+</div>
