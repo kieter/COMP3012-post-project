@@ -111,6 +111,8 @@ function getPosts(n = 5, sub = undefined) {
 }
 
 function getPost(id) {
+  //Check there is a post
+  if (!posts[id]) return null;
   return decoratePost(posts[id]);
 }
 
