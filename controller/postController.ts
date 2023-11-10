@@ -34,8 +34,9 @@ async function addComment(
 
 // Create a new comment
 async function getComment(commentId: number) {
-  const comment = db.getComment(commentId);
+  const comment = await db.getComment(commentId);
 
+  if (!comment) return null;
   //Fetching user instead of the id
   const user = db.getUser(comment.creator);
   comment.creator = user;

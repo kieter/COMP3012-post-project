@@ -7,7 +7,10 @@ import { ensureAuthenticated } from "../middleware/checkAuth";
 router.get("/show/:commentid", ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentid;
   const comment = await database.getComment(commentId);
-  console.log(await req.user, comment);
+
+  //if not comment redirect to home
+  if (!comment) res.redirect("/");
+
   const data = {
     comment,
     user: await req.user,
@@ -15,13 +18,24 @@ router.get("/show/:commentid", ensureAuthenticated, async (req, res) => {
   res.render("helpers/comment", data);
 });
 
-router.get("/deleteconfirm/:commentid", (req, res) => {
+router.get("/deleteconfirm/:commentid", ensureAuthenticated, (req, res) => {
   const commentId = req.params.commentid;
   res.render("helpers/deleteConfirmComment", { commentId });
 });
 
-router.post("/delete/:commentid", ensureAuthenticated, (req, res) => {
+router.post("/delete/:commentid", ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentid;
+  const comment = await database.getComment(commentId);
+  const user = await req.user;
+
+  //if not comment redirect to home
+  if (!comment) return res.redirect("/");
+  //only if the comment exists an the user is the owner of the post
+  if (comment.creator.id === user.id) {
+    database.deleteComment(commentId);
+  }
+
+  res.redirect(`/posts/show/${comment.post_id}`);
 });
 
 export default router;
