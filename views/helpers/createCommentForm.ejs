@@ -1,0 +1,9 @@
+<div style="width: 500px">
+  <form action="/posts/comment-create/<%= post.id  %>" method="POST">
+    <label for="comment">Add your thoughts<span>*</span>:</label><br />
+    <textarea id="comment" name="comment" rows="4" cols="50" required></textarea
+    ><br /><br />
+
+    <input type="submit" value="Comment" />
+  </form>
+</div>

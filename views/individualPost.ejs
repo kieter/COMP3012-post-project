@@ -9,23 +9,25 @@
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"
     />
     <link href="/css/style.css" rel="stylesheet" />
-    <title><%= title %></title>
+    <title><%= post.title %></title>
   </head>
   <body>
     <main>
       <div class="authOptions">
-        <h1><%= title %></h1>
+        <h1><%= post.title %></h1>
         <a role="button" href="/posts">Home</a>
       </div>
       <div>
-        <p><%= description %></p>
+        <p><%= post.description %></p>
         <div style="line-height: 1px; margin-top: 50px">
-          <p>Link <a href="<%= link %>" target="_blank"><%= link %></a></p>
-          <p>Created by: <%= creator.uname %></p>
+          <p>
+            Link <a href="<%= post.link %>" target="_blank"><%= post.link %></a>
+          </p>
+          <p>Created by: <%= post.creator.uname %></p>
           <p>
             Created At:
             <small>
-              <% const commentInfo = new Date(timestamp); %> <%=
+              <% const commentInfo = new Date(post.timestamp); %> <%=
               commentInfo.toLocaleDateString("en-US") %></small
             >
           </p>
@@ -34,9 +36,12 @@
         <hr />
         <div>
           <h4>Comments</h4>
+          <% if(user) { %>
+          <div><%- include("./helpers/createCommentForm.ejs") %></div>
+          <% } %>
           <div style="padding: 10px; padding-top: 1px">
             <ul class="timeline">
-              <% comments.forEach(function(report) { %>
+              <% post.comments.forEach(function(report) { %>
               <li style="list-style-type: none">
                 <div class="timeline-time">
                   <p class="date" style="text-align: left; margin-bottom: 1px">

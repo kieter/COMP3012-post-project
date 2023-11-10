@@ -39,7 +39,12 @@ router.get("/show/:postid", async (req, res) => {
   //If not post found redirect to home
   if (!post) return res.redirect("/");
 
-  res.render("individualPost", post);
+  const data = {
+    post,
+    user: await req.user,
+  };
+
+  res.render("individualPost", data);
 });
 
 router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
@@ -62,7 +67,11 @@ router.post(
   "/comment-create/:postid",
   ensureAuthenticated,
   async (req, res) => {
-    // ⭐ TODO
+    const { comment } = req.body;
+    const postId = req.params.postid;
+    const user = await req.user;
+    await database.addComment(postId, user.id, comment);
+    res.redirect(`/posts/show/${postId}`);
   }
 );
 

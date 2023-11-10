@@ -21,4 +21,13 @@ async function addPost(
   return db.addPost(title, link, creator, description, subgroup);
 }
 
-export { getPosts, getPost, addPost };
+// Create a new comment
+async function addComment(
+  post_id: number,
+  creator: number,
+  description: string
+) {
+  return db.addComment(post_id, creator, description);
+}
+
+export { getPosts, getPost, addPost, addComment };
