@@ -168,6 +168,18 @@ function addComment(post_id, creator, description) {
   return comment;
 }
 
+function getComment(id) {
+  //Check there is a post
+  if (!comments[id]) return null;
+  return comments[id];
+}
+
+function deleteComment(id) {
+  //Check there is a post
+  if (!getComment(id)) return null;
+  delete comments[id];
+}
+
 export {
   debug,
   getUser,
@@ -179,5 +191,7 @@ export {
   deletePost,
   getSubs,
   addComment,
+  getComment,
+  deleteComment,
   decoratePost,
 };

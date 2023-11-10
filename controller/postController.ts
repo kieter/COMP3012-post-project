@@ -21,6 +21,8 @@ async function addPost(
   return db.addPost(title, link, creator, description, subgroup);
 }
 
+//COMMENTS SECTION instead of creating multiple controllers
+
 // Create a new comment
 async function addComment(
   post_id: number,
@@ -30,4 +32,20 @@ async function addComment(
   return db.addComment(post_id, creator, description);
 }
 
-export { getPosts, getPost, addPost, addComment };
+// Create a new comment
+async function getComment(commentId: number) {
+  const comment = db.getComment(commentId);
+
+  //Fetching user instead of the id
+  const user = db.getUser(comment.creator);
+  comment.creator = user;
+
+  return db.getComment(commentId);
+}
+
+// Create a new comment
+async function deleteComment(commentId: number) {
+  return db.deleteComment(commentId);
+}
+
+export { getPosts, getPost, addPost, addComment, getComment, deleteComment };
