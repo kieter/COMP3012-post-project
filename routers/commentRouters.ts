@@ -33,6 +33,9 @@ router.post("/delete/:commentid", ensureAuthenticated, async (req, res) => {
   //only if the comment exists an the user is the owner of the post
   if (comment.creator.id === user.id) {
     database.deleteComment(commentId);
+  } else {
+    //If its not the owner send back to home
+    return res.redirect("/");
   }
 
   res.redirect(`/posts/show/${comment.post_id}`);
