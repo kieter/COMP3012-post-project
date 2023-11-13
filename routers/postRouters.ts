@@ -38,7 +38,9 @@ router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
 
   //If not post found redirect to home
-  if (!post) return res.redirect("/");
+  if (!post) {
+   return res.render("404NotFound")
+  }
 
   const data = {
     post,
@@ -66,7 +68,6 @@ router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
     res.redirect(`/posts/show/${postId}`)
   } catch (e) {
     console.log(e);
-    // todo: error page
     res.redirect('/posts');
   }
 });

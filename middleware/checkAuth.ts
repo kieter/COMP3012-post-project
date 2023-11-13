@@ -16,13 +16,16 @@ async function ensureAuthenticatedAsUserId(req: Request, res: Response, next: Ne
     const postId = req.params.postid;
     const post = await getPost(Number(postId));
 
+    if (!post) {
+      return res.render("404NotFound");
+    }
+
     // @ts-ignore
     if (post && req.session.passport.user === post.creator.id) {
       return next();
     }
-    //todo 404 page for post not found
-    //todo 403 page for not authorized
-    res.redirect("/auth/login");
+
+    res.render("403Forbidden")
   } catch (error) {
     console.error(error);
     res.redirect("/auth/login");
