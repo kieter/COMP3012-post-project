@@ -2,7 +2,8 @@
 import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
-import { ensureAuthenticated } from "../middleware/checkAuth";
+import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
+import {getPost} from "../controller/postController";
 
 router.get("/", async (req, res) => {
   const posts = await database.getPosts(20);
@@ -47,8 +48,10 @@ router.get("/show/:postid", async (req, res) => {
   res.render("individualPost", data);
 });
 
-router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
+router.get("/edit/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
   // ⭐ TODO
+  const post = await getPost(req.params.postid)
+  res.render("editPost", {post});
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
