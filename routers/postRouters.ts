@@ -3,7 +3,7 @@ import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
 import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
-import { getPost, editPost } from "../controller/postController";
+import { getPost, editPost, deletePost } from "../controller/postController";
 
 router.get("/", async (req, res) => {
   const posts = await database.getPosts(20);
@@ -71,12 +71,24 @@ router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
   }
 });
 
-router.get("/deleteconfirm/:postid", ensureAuthenticated, async (req, res) => {
-  // ⭐ TODO
+router.get("/deleteconfirm/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
+  const post = await getPost(req.params.postid)
+  res.render("deleteConfirmPost", {post});
 });
 
 router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
-  // ⭐ TODO
+  try {
+    const postId = req.params.postid;
+    const post = await getPost(postId)
+    const postSubgroup = post.subgroup;
+    const user = await req.user;
+
+    await deletePost(postId);
+    res.redirect(`/subs/show/${postSubgroup}`);
+  } catch (e) {
+    console.log(e);
+    res.redirect(`/posts/show/${postId}`)
+  }
 });
 
 router.post(

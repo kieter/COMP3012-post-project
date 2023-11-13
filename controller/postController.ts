@@ -31,6 +31,11 @@ async function editPost(
 ) {
   return db.editPost(postId, changes);
 }
+
+async function deletePost(postId: number) {
+  return db.deletePost(postId);
+}
+
 //COMMENTS SECTION instead of creating multiple controllers
 
 // Create a new comment
@@ -59,4 +64,4 @@ async function deleteComment(commentId: number) {
   return db.deleteComment(commentId);
 }
 
-export { getPosts, getPost, addPost, editPost, addComment, getComment, deleteComment };
+export { getPosts, getPost, addPost, editPost, deletePost, addComment, getComment, deleteComment };
