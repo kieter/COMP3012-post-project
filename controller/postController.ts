@@ -21,6 +21,16 @@ async function addPost(
   return db.addPost(title, link, creator, description, subgroup);
 }
 
+async function editPost(
+  postId: number,
+  changes: {
+    title?: string;
+    link?: string;
+    description?: string;
+  }
+) {
+  return db.editPost(postId, changes);
+}
 //COMMENTS SECTION instead of creating multiple controllers
 
 // Create a new comment
@@ -49,4 +59,4 @@ async function deleteComment(commentId: number) {
   return db.deleteComment(commentId);
 }
 
-export { getPosts, getPost, addPost, addComment, getComment, deleteComment };
+export { getPosts, getPost, addPost, editPost, addComment, getComment, deleteComment };

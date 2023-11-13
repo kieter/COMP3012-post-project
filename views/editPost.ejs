@@ -17,17 +17,20 @@
         <h1>Edit Post</h1>
         <a role="button" href="/posts">Home</a>
     </div>
-    <form method="POST" action="/post/edit/<%= post.id %>">
+    <form method="POST" action="/posts/edit/<%= post.id %>">
         <label for="title">
             Title
             <input type="text" name="title" placeholder="Enter title here" value="<%= post.title %>" />
         </label>
         <label for="description">
             Description
-            <textarea name="content" placeholder="Enter description here"><%= post.description %></textarea>
+            <textarea name="description" placeholder="Enter description here" value="<%= post.description %>"><%= post.description %></textarea>
+        </label>
+        <label for="link">
+            Link
+            <input type="text" name="link" placeholder="Enter link here" value="<%= post.link %>" />
         </label>
         <input type="hidden" name="id" value="<%= post.id %>" />
-<!--        <input type="hidden" name="user_id" value="<%= post.user_id %>" />-->
         <button type="submit">Save</button>
     </form>
 </main>

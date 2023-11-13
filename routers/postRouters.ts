@@ -3,7 +3,7 @@ import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
 import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
-import {getPost} from "../controller/postController";
+import { getPost, editPost } from "../controller/postController";
 
 router.get("/", async (req, res) => {
   const posts = await database.getPosts(20);
@@ -49,13 +49,26 @@ router.get("/show/:postid", async (req, res) => {
 });
 
 router.get("/edit/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
-  // ⭐ TODO
   const post = await getPost(req.params.postid)
   res.render("editPost", {post});
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
-  // ⭐ TODO
+  try {
+    const { title, link, description } = req.body;
+    const postId = req.params.postid;
+    const user = await req.user;
+    await editPost(postId, {
+      title,
+      link,
+      description,
+    });
+    res.redirect(`/posts/show/${postId}`)
+  } catch (e) {
+    console.log(e);
+    // todo: error page
+    res.redirect('/posts');
+  }
 });
 
 router.get("/deleteconfirm/:postid", ensureAuthenticated, async (req, res) => {
