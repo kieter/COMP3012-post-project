@@ -85,6 +85,24 @@ function getVotesForPost(post_id) {
   return votes.filter((vote) => vote.post_id === post_id);
 }
 
+function insertOrUpdateVotesForPost(
+  post_id: number,
+  user_id: number,
+  value: number
+) {
+  const findVote = votes.findIndex(
+    (vote) => vote.post_id == post_id && vote.user_id == user_id
+  );
+
+  if (findVote >= 0) {
+    //update
+    votes[findVote].value = value;
+  } else {
+    //if not found create
+    votes.push({ user_id, post_id: +post_id, value });
+  }
+}
+
 function decoratePost(post) {
   post = {
     ...post,
@@ -194,4 +212,5 @@ export {
   getComment,
   deleteComment,
   decoratePost,
+  insertOrUpdateVotesForPost,
 };

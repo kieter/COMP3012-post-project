@@ -2,7 +2,10 @@
 import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
-import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
+import {
+  ensureAuthenticated,
+  ensureAuthenticatedAsUserId,
+} from "../middleware/checkAuth";
 import { getPost, editPost, deletePost } from "../controller/postController";
 
 router.get("/", async (req, res) => {
@@ -36,23 +39,26 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 
 router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
+  const user = await req.user;
+  const votes = await database.getVotes(post.id, user.id);
 
   //If not post found redirect to home
   if (!post) {
-   return res.render("404NotFound")
+    return res.render("404NotFound");
   }
 
   const data = {
     post,
-    user: await req.user,
+    user,
+    votes,
   };
 
   res.render("individualPost", data);
 });
 
 router.get("/edit/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
-  const post = await getPost(req.params.postid)
-  res.render("editPost", {post});
+  const post = await getPost(req.params.postid);
+  res.render("editPost", { post });
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
@@ -65,22 +71,26 @@ router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
       link,
       description,
     });
-    res.redirect(`/posts/show/${postId}`)
+    res.redirect(`/posts/show/${postId}`);
   } catch (e) {
     console.log(e);
-    res.redirect('/posts');
+    res.redirect("/posts");
   }
 });
 
-router.get("/deleteconfirm/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
-  const post = await getPost(req.params.postid)
-  res.render("deleteConfirmPost", {post});
-});
+router.get(
+  "/deleteconfirm/:postid",
+  ensureAuthenticatedAsUserId,
+  async (req, res) => {
+    const post = await getPost(req.params.postid);
+    res.render("deleteConfirmPost", { post });
+  }
+);
 
 router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
   try {
     const postId = req.params.postid;
-    const post = await getPost(postId)
+    const post = await getPost(postId);
     const postSubgroup = post.subgroup;
     const user = await req.user;
 
@@ -88,7 +98,7 @@ router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
     res.redirect(`/subs/show/${postSubgroup}`);
   } catch (e) {
     console.log(e);
-    res.redirect(`/posts/show/${postId}`)
+    res.redirect(`/posts/show/${postId}`);
   }
 });
 
@@ -103,5 +113,15 @@ router.post(
     res.redirect(`/posts/show/${postId}`);
   }
 );
+
+//vote System
+
+router.post("/vote/:postid", ensureAuthenticated, async (req, res) => {
+  const post_id = req.params.postid;
+  const user = await req.user;
+  const { action } = req.body;
+  database.updateVotes(post_id, user.id, action);
+  res.redirect(`/posts/show/${post_id}`);
+});
 
 export default router;
