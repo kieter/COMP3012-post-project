@@ -124,7 +124,9 @@ function getPosts(n = 5, sub = undefined) {
   if (sub) {
     allPosts = allPosts.filter((post) => post.subgroup === sub);
   }
-  allPosts.sort((a, b) => b.timestamp - a.timestamp);
+  allPosts = allPosts
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .map((a) => decoratePost(a));
   return allPosts.slice(0, n);
 }
 

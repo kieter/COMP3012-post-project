@@ -40,7 +40,6 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
   const user = await req.user;
-  const votes = await database.getVotes(post.id, user.id);
 
   //If not post found redirect to home
   if (!post) {
@@ -50,7 +49,6 @@ router.get("/show/:postid", async (req, res) => {
   const data = {
     post,
     user,
-    votes,
   };
 
   res.render("individualPost", data);
