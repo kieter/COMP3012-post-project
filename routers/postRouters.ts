@@ -114,12 +114,14 @@ router.post(
 
 //vote System
 
-router.post("/vote/:postid", ensureAuthenticated, async (req, res) => {
+router.post("/vote/:postid", async (req, res) => {
   const post_id = req.params.postid;
   const user = await req.user;
   const { action } = req.body;
-  database.updateVotes(post_id, user.id, action);
-  res.redirect(`/posts/show/${post_id}`);
+
+  const data = await database.updateVotes(post_id, user.id, action);
+
+  res.status(200).send(JSON.stringify(data));
 });
 
 export default router;

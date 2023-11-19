@@ -74,14 +74,22 @@ async function getVotes(postId: number, activeUser: number) {
 
 async function updateVotes(post_id: number, user_id: number, action: string) {
   const votes = await getVotes(post_id, user_id);
-  const is_up = action == "Up";
-  let value = is_up ? +1 : -1;
-  //if already has a value
+  let value = action == "Up" ? +1 : -1;
 
+  //if already has a value
   if (votes && votes.value != 0) {
     value = 0;
   }
-  const post = await db.insertOrUpdateVotesForPost(post_id, user_id, value);
+  await db.insertOrUpdateVotesForPost(post_id, user_id, value);
+  const post = await getPost(post_id);
+
+  //Return the new Counted value
+  let newValue = post.votes.reduce(
+    (cur: number, { value }: { value: number }) => cur + value,
+    0
+  );
+
+  return { newValue, value };
 }
 
 export {

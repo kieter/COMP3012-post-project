@@ -3,3 +3,34 @@
   justify-content: space-between;
   align-items: flex-start;
 }
+
+.vote-box {
+  display: flex;
+  align-items: baseline;
+}
+
+.vote-label {
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+.vote-group {
+  display: flex;
+  width: 80px;
+  justify-content: space-around;
+  align-content: center;
+}
+
+.vote-button {
+  font-size: 10px;
+  height: 15px;
+  width: 35px;
+  border-radius: 5px;
+  background-color: gray;
+  text-align: center;
+  cursor: pointer;
+}
+
+.vote-active-button {
+  background-color: hsl(195, 80%, 50%);
+}
