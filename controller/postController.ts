@@ -64,4 +64,43 @@ async function deleteComment(commentId: number) {
   return db.deleteComment(commentId);
 }
 
-export { getPosts, getPost, addPost, editPost, deletePost, addComment, getComment, deleteComment };
+async function getVotes(postId: number, activeUser: number) {
+  const post = await getPost(postId);
+  const userVote = post.votes.filter(
+    (p: { user_id: number }) => p.user_id == activeUser
+  );
+  return userVote[0];
+}
+
+async function updateVotes(post_id: number, user_id: number, action: string) {
+  const votes = await getVotes(post_id, user_id);
+  let value = action == "Up" ? +1 : -1;
+
+  //if already has a value
+  if (votes && votes.value != 0) {
+    value = 0;
+  }
+  await db.insertOrUpdateVotesForPost(post_id, user_id, value);
+  const post = await getPost(post_id);
+
+  //Return the new Counted value
+  let newValue = post.votes.reduce(
+    (cur: number, { value }: { value: number }) => cur + value,
+    0
+  );
+
+  return { newValue, value };
+}
+
+export {
+  getPosts,
+  getPost,
+  addPost,
+  editPost,
+  deletePost,
+  addComment,
+  getComment,
+  deleteComment,
+  getVotes,
+  updateVotes,
+};

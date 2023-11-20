@@ -1,0 +1,71 @@
+<div class="vote-box">
+  <p class="vote-label">
+    Votes:
+    <span id="vote_group_label_<%= post.id %>"
+      ><%= post.votes.reduce( (cur, { value }) => cur + value, 0 );%></span
+    >
+  </p>
+
+  <% if(user) { %> <% const votes = post.votes.filter( (p) => p.user_id ==
+  user.id )[0]; %>
+
+  <div class="vote-group" id="vote-group-<%= post.id %>">
+    <span
+      id="vote_Up_<%= post.id %>"
+      class="vote-button<% if(votes && votes.value == 1) { %> vote-active-button <% } %>"
+      type="submit"
+      onclick="updateVotes('Up','<%= post.id %>')"
+      >Up</span
+    >
+
+    <span
+      id="vote_Down_<%= post.id %>"
+      class="vote-button<% if(votes && votes.value == -1) { %> vote-active-button <% } %>"
+      onclick="updateVotes('Down','<%= post.id %>')"
+      >Down</span
+    >
+  </div>
+
+  <% } %>
+</div>
+
+<script>
+  function updateVotes(action, post_id) {
+    fetch(`/posts/vote/${post_id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ action }),
+    })
+      .then(async function (res) {
+        const data = await res.json();
+        const { newValue, value } = data;
+
+        //remove the active button class
+        const votes = document
+          .getElementById(`vote-group-${post_id}`)
+          .getElementsByClassName("vote-button");
+
+        for (var i = 0; i < votes.length; i++) {
+          votes[i].classList.remove("vote-active-button");
+        }
+
+        //Update button with Active Button
+        if (value != 0) {
+          const activeButton = `vote_${action}_${post_id}`;
+          document
+            .getElementById(activeButton)
+            .classList.add("vote-active-button");
+        }
+
+        //Update value of current votes
+        document.getElementById(`vote_group_label_${post_id}`).textContent =
+          newValue;
+      })
+      .catch(function (res) {
+        console.log("Something went wrong to inform to the user", res);
+      });
+  }
+</script>

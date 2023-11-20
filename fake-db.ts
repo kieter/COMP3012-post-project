@@ -85,6 +85,24 @@ function getVotesForPost(post_id) {
   return votes.filter((vote) => vote.post_id === post_id);
 }
 
+function insertOrUpdateVotesForPost(
+  post_id: number,
+  user_id: number,
+  value: number
+) {
+  const findVote = votes.findIndex(
+    (vote) => vote.post_id == post_id && vote.user_id == user_id
+  );
+
+  if (findVote >= 0) {
+    //update
+    votes[findVote].value = value;
+  } else {
+    //if not found create
+    votes.push({ user_id, post_id: +post_id, value });
+  }
+}
+
 function decoratePost(post) {
   post = {
     ...post,
@@ -106,7 +124,9 @@ function getPosts(n = 5, sub = undefined) {
   if (sub) {
     allPosts = allPosts.filter((post) => post.subgroup === sub);
   }
-  allPosts.sort((a, b) => b.timestamp - a.timestamp);
+  allPosts = allPosts
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .map((a) => decoratePost(a));
   return allPosts.slice(0, n);
 }
 
@@ -194,4 +214,5 @@ export {
   getComment,
   deleteComment,
   decoratePost,
+  insertOrUpdateVotesForPost,
 };

@@ -37,6 +37,7 @@
           <a href="/posts/show/<%=post.id%>"><%= post.title %></a>
           <span>By <%= getUser(post.creator).uname.toUpperCase() %></pspan>
           <p><%= post.description %></p>
+          <%- include("./helpers/votes.ejs", {post}) %>
         </div>
         <% }) %>
       </div>
