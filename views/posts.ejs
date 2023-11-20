@@ -35,7 +35,8 @@
         <% posts.forEach(post => { %>
         <div class="individualPost">
           <a href="/posts/show/<%=post.id%>"><%= post.title %></a>
-          <span>By <%= getUser(post.creator).uname.toUpperCase() %></pspan>
+          <span>By <%= getUser(post.creator.id).uname.toUpperCase() %></span>
+          {console.log(getUser(post.creator))}
           <p><%= post.description %></p>
           <%- include("./helpers/votes.ejs", {post}) %>
         </div>
