@@ -2,15 +2,11 @@
 import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
-<<<<<<< HEAD
 import { getUser } from "../fake-db";
-import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
-=======
 import {
   ensureAuthenticated,
   ensureAuthenticatedAsUserId,
 } from "../middleware/checkAuth";
->>>>>>> 26e7c3294f3372f28406313eb2a5a37be9e2cea9
 import { getPost, editPost, deletePost } from "../controller/postController";
 
 
