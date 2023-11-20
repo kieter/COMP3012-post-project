@@ -18,7 +18,10 @@
         <a role="button" href="/posts">Home</a>
       </div>
       <div>
-        <p>Implement this page yourself. It is from subs.ejs</p>
+        <% AlphaOrderSubGroup.forEach(subgroup => { %>
+          <a href="/subs/show/<%= subgroup %>"><%= subgroup %></a><br>
+        
+      <% }) %>
       </div>
     </main>
   </body>

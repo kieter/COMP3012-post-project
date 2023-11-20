@@ -14,11 +14,15 @@
   <body>
     <main>
       <div class="authOptions">
-        <h1>Sub Posts</h1>
+        <h1><%= subname %></h1>
         <a role="button" href="/posts">Home</a>
       </div>
       <div>
-        <p>Implement this page yourself. It is from sub.ejs</p>
+        <% TimeOrderSub.forEach(post => { %>
+          <a><%= post.title %></a>
+          <p><%= post.description %></p>
+
+        <% })%>
       </div>
     </main>
   </body>

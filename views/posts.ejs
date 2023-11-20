@@ -10,6 +10,12 @@
     />
     <link href="/css/style.css" rel="stylesheet" />
     <title>Homepage</title>
+
+    <script>
+      
+    </script>
+
+  
   </head>
   <body>
     <main>
@@ -24,9 +30,12 @@
       <h2>Welcome, <%= user?.uname || "Visitor" %></h2>
       <div>
         <p>All Posts</p>
+        <button><a href="/posts?sortBy=date">By Data</a></button>
+        <button><a href="/posts?sortBy=vote">By Vote</a></button>
         <% posts.forEach(post => { %>
         <div class="individualPost">
           <a href="/posts/show/<%=post.id%>"><%= post.title %></a>
+          <span>By <%= getUser(post.creator).uname.toUpperCase() %></pspan>
           <p><%= post.description %></p>
         </div>
         <% }) %>

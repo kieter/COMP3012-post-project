@@ -2,14 +2,17 @@
 import express from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
+import { getUser } from "../fake-db";
 import {ensureAuthenticated, ensureAuthenticatedAsUserId} from "../middleware/checkAuth";
 import { getPost, editPost, deletePost } from "../controller/postController";
 
+
 router.get("/", async (req, res) => {
   const posts = await database.getPosts(20);
-  const user = await req.user;
-  res.render("posts", { posts, user });
+  const user =  req.user;
+  res.render("posts", { posts, user, getUser });
 });
+
 
 router.get("/create", ensureAuthenticated, (req, res) => {
   res.render("createPosts");
