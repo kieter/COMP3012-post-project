@@ -1,4 +1,5 @@
 import * as db from "../fake-db";
+import {isUsernameTaken} from "../fake-db";
 
 export const getUserByEmailIdAndPassword = async (
   uname: string,
@@ -13,6 +14,17 @@ export const getUserByEmailIdAndPassword = async (
     }
   }
 };
+
+export const createUser = async (
+  uname: string,
+  password: string,
+) => {
+  if (isUsernameTaken(uname)) {
+    return null;
+  } else {
+    return db.createUser(uname, password);
+  }
+}
 
 export const getUserById = async (id: string) => {
   let user = db.getUser(id);

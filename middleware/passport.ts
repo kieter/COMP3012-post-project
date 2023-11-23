@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import {
+  createUser,
   getUserByEmailIdAndPassword,
   getUserById,
 } from "../controller/userController";
@@ -23,6 +24,22 @@ const localLogin = new LocalStrategy(
   }
 );
 
+const localRegister = new LocalStrategy(
+  {
+    usernameField: "uname",
+    passwordField: "password",
+    passReqToCallback: true,
+  },
+  async (req: any, uname: any, password: any, done: any) => {
+    const user = await createUser(uname, password);
+    return user
+      ? done(null, user)
+      : done(null, false, {
+          message: "Your login details are not valid. Please try again.",
+        });
+  }
+);
+
 // ⭐ TODO: Passport Types
 passport.serializeUser(function (user: any, done: any) {
   console.log("serialize: " + user.id);
@@ -30,8 +47,8 @@ passport.serializeUser(function (user: any, done: any) {
 });
 
 // ⭐ TODO: Passport Types
-passport.deserializeUser(function (id: any, done: any) {
-  const user = getUserById(id);
+passport.deserializeUser(async function (id: any, done: any) {
+  const user = await getUserById(id);
   if (user) {
     done(null, user);
   } else {
@@ -39,4 +56,7 @@ passport.deserializeUser(function (id: any, done: any) {
   }
 });
 
-export default passport.use(localLogin);
+passport.use('localLogin', localLogin);
+passport.use('localRegister', localRegister);
+
+export default passport;

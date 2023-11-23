@@ -75,10 +75,25 @@ function getUser(id) {
   return users[id];
 }
 
+function isUsernameTaken(uname) {
+  return Object.values(users).some((user) => user.uname === uname);
+}
+
 function getUserByUsername(uname: any) {
   return getUser(
-    Object.values(users).filter((user) => user.uname === uname)[0].id
+    Object.values(users).filter((user) => user.uname === uname)[0]?.id
   );
+}
+
+function createUser(uname, password) {
+  let id = Math.max(...Object.keys(users).map(Number)) + 1;
+  let user = {
+    id,
+    uname,
+    password,
+  };
+  users[id] = user;
+  return user;
 }
 
 function getVotesForPost(post_id) {
@@ -215,4 +230,6 @@ export {
   deleteComment,
   decoratePost,
   insertOrUpdateVotesForPost,
+  createUser,
+  isUsernameTaken
 };
