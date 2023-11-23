@@ -4,6 +4,22 @@
   align-items: flex-start;
 }
 
+.header {
+  display: grid;
+  grid-template-columns: 60% repeat(auto-fit, minmax(0, 1fr));
+  align-items: start;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.header a {
+  justify-self: end;
+}
+
+.header .siteTitle {
+  justify-self: start;
+}
+
 .vote-box {
   display: flex;
   align-items: baseline;

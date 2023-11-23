@@ -1,0 +1,14 @@
+<header>
+    <div class="header">
+        <a class="siteTitle" href="/">Post project</a>
+        <a href="/subs/list">Subgroups</a>
+        <% if (!user) { %>
+            <a href="/auth/register">Sign up</a>
+            <a href="/auth/login">Login</a>
+        <% } else { %>
+            <a href="/posts/create">+ Create</a>
+            <a href="/auth/logout">Logout</a>
+        <% } %>
+    </div>
+</header>
+

@@ -5,7 +5,7 @@ const router = express.Router();
 import { getSubs } from "../fake-db";
 
 router.get("/list", async (req, res) => {
-  // ⭐ TODO 
+  // ⭐ TODO
   const posts = await database.getPosts()
   const AlphaOrderSubGroup=getSubs().sort((a, b)=> {
     if (a > b) {
@@ -14,7 +14,7 @@ router.get("/list", async (req, res) => {
       return -1;
     }
   })
-  res.render("subs",{AlphaOrderSubGroup,posts})
+  res.render("subs",{AlphaOrderSubGroup, posts, user: req.user})
 });
 
 router.get("/show/:subname", async (req, res) => {
@@ -27,9 +27,9 @@ router.get("/show/:subname", async (req, res) => {
  const filteredSubgroup = Object.values(posts).filter(
    (post) => post.subgroup === subname);
  const TimeOrderSub = filteredSubgroup.sort((a,b)=>{
- return b.timestamp - a.timestamp 
+ return b.timestamp - a.timestamp
  })
- res.render("sub", { subname, TimeOrderSub })
+ res.render("sub", { subname, TimeOrderSub, user: req.user })
 });
 
 export default router;

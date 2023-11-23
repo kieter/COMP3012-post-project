@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
 
 router.get("/create", ensureAuthenticated, (req, res) => {
-  res.render("createPosts");
+  res.render("createPosts", { user: req.user });
 });
 
 router.post("/create", ensureAuthenticated, async (req, res) => {
@@ -84,7 +84,7 @@ router.get(
   ensureAuthenticatedAsUserId,
   async (req, res) => {
     const post = await getPost(req.params.postid);
-    res.render("deleteConfirmPost", { post });
+    res.render("deleteConfirmPost", { post, user: req.user });
   }
 );
 

@@ -10,15 +10,10 @@
     />
     <link href="/css/style.css" rel="stylesheet" />
     <title>Homepage</title>
-
-    <script>
-      
-    </script>
-
-  
   </head>
   <body>
     <main>
+      <%- include('./header.ejs') %>
       <div class="authOptions">
         <h1>Homepage</h1>
         <% if (!user) { %>
@@ -36,7 +31,6 @@
         <div class="individualPost">
           <a href="/posts/show/<%=post.id%>"><%= post.title %></a>
           <span>By <%= getUser(post.creator.id).uname.toUpperCase() %></span>
-          {console.log(getUser(post.creator))}
           <p><%= post.description %></p>
           <%- include("./helpers/votes.ejs", {post}) %>
         </div>

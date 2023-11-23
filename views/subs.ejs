@@ -13,6 +13,7 @@
   </head>
   <body>
     <main>
+      <%- include('./header.ejs') %>
       <div class="authOptions">
         <h1>Sub Groups</h1>
         <a role="button" href="/posts">Home</a>
@@ -20,7 +21,7 @@
       <div>
         <% AlphaOrderSubGroup.forEach(subgroup => { %>
           <a href="/subs/show/<%= subgroup %>"><%= subgroup %></a><br>
-        
+
       <% }) %>
       </div>
     </main>
