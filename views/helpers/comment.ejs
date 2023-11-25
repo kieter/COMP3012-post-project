@@ -17,6 +17,10 @@
     </small>
     <% if(user && comment.creator.id == user.id) { %>
     <a href="/comments/deleteConfirm/<%= comment.id%>">Delete</a>
+    <a href="/comments/edit/<%= comment.id%>">Edit</a>
+    <a href="/comments/reply/<%= comment.id%>">Reply</a>
     <% } %>
+    
+
   </div>
 </div>

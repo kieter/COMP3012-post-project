@@ -20,7 +20,7 @@
       </div>
       <div>
         <% TimeOrderSub.forEach(post => { %>
-          <a><%= post.title %></a>
+          <a href="/posts/show/<%= post.id %>"><%= post.title %></a>
           <p><%= post.description %></p>
 
         <% })%>

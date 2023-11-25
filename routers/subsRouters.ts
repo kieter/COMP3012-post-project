@@ -19,9 +19,7 @@ router.get("/list", async (req, res) => {
 
 router.get("/show/:subname", async (req, res) => {
   // ⭐ TODO
- //CHECK : do we need author's name in here?
- //did not implement the induvidial post
- //HELP shall we use get post but could not use string somehow
+ 
  const subname=req.params.subname
  const posts = await database.getPosts()
  const filteredSubgroup = Object.values(posts).filter(

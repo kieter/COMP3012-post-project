@@ -59,11 +59,20 @@ async function getComment(commentId: number) {
   return db.getComment(commentId);
 }
 
-// Create a new comment
+//EditComment
+async function editComment(id: number, newComment: any) {
+  let comment = await db.getComment(id);
+  comment.description = newComment.comment;
+  await db.updateComment(id, comment);
+  return await comment;
+}
+
+// delete a new comment
 async function deleteComment(commentId: number) {
   return db.deleteComment(commentId);
 }
 
+//Vote section
 async function getVotes(postId: number, activeUser: number) {
   const post = await getPost(postId);
   const userVote = post.votes.filter(
@@ -91,6 +100,80 @@ async function updateVotes(post_id: number, user_id: number, action: string) {
 
   return { newValue, value };
 }
+//count the vote amount
+async function totalVote(post_id:number){
+  const allVoteByPostId = await db.getVotesForPost(post_id)
+  const voteTotal = await allVoteByPostId.reduce((acc, vote) => acc + vote.value, 0);
+return voteTotal
+}
+
+async function totalControvatialVote(post_id:number){
+  const allVoteByPostId = await db.getVotesForPost(post_id)
+  const voteTotal = await allVoteByPostId.length;
+return voteTotal
+}
+
+async function sortByVote(array:any) {
+  const allVotes = await Promise.all(array.map(async (post:any) => {
+    return {
+      postId: post.id,
+      votes: await totalVote(post.id),
+    };
+  }));
+  const addVoteValue = allVotes.map(({ postId, votes }) => ({
+    postId,
+    postDetails: array.find((post:any) => post.id === postId),
+    votes,
+  }));
+  const sortedPosts = addVoteValue.sort((a, b) => b.votes - a.votes).map(({ postDetails }) => postDetails);
+  return sortedPosts;
+}
+
+async function sortByControvatial(array:any) {
+  const allVotes = await Promise.all(array.map(async (post:any) => {
+    return {
+      postId: post.id,
+      votes: await totalControvatialVote(post.id),
+    };
+  }));
+  const addVoteValue = allVotes.map(({ postId, controvvatialVotes }) => ({
+    postId,
+    postDetails: array.find((post:any) => post.id === postId),
+    controvvatialVotes,
+  }));
+  const sortedPosts = addVoteValue.sort((a, b) => b.controvvatialVotes - a.controvvatialVotes).map(({ postDetails }) => postDetails);
+  return sortedPosts;
+}
+
+function calculateHotScore(totalLikes:number, commentNumber:number, postTimestamp:number) {
+  const currentTimestamp = new Date().getTime();
+  const timeDifference = currentTimestamp - postTimestamp;
+  const score = totalLikes + commentNumber / 2 + 1 / Math.sqrt(timeDifference + 1);
+  return score;
+}
+
+async function sortByHot(array:any) {
+  const allVotes = await Promise.all(array.map(async (post:any) => {
+    return {
+      postId: post.id,
+      votes: await totalVote(post.id),
+      comments: await db.countComment(post.id),
+      timestamp: post.timestamp,
+    };
+  }));
+  const addHotValue = await Promise.all(allVotes.map(async(e:any)=>{
+    const postDetails = await array.find((postItem:any) => e.postId === postItem.id);
+    return{
+    postId: e.postId,
+    hotnumber: await calculateHotScore(e.votes, e.comments, e.timestamp),
+    postDetails,
+    }
+  }))
+  const sortedPosts = addHotValue.sort((a, b) => b.hotnumber - a.hotnumber).map(({ postDetails }:any) => postDetails);
+  return sortedPosts;
+}
+
+
 
 export {
   getPosts,
@@ -100,7 +183,11 @@ export {
   deletePost,
   addComment,
   getComment,
+  editComment,
   deleteComment,
   getVotes,
   updateVotes,
+  sortByVote,
+  sortByControvatial,
+  sortByHot,
 };

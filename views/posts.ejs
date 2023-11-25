@@ -10,6 +10,9 @@
     />
     <link href="/css/style.css" rel="stylesheet" />
     <title>Homepage</title>
+
+
+  
   </head>
   <body>
     <main>
@@ -25,8 +28,15 @@
       <h2>Welcome, <%= user?.uname || "Visitor" %></h2>
       <div>
         <p>All Posts</p>
-        <button><a href="/posts?sortBy=date">By Data</a></button>
-        <button><a href="/posts?sortBy=vote">By Vote</a></button>
+        
+        <div class=sortParent>
+            <p>sort:</p>
+          <small className="sort"><a href="/posts?sortBy=date">By Data</a></small>
+          <small className="sort"><a href="/posts?sortBy=vote">By Vote</a></small>
+          <small className="sort"><a href="/posts?sortBy=hot">By Hot</a></small>
+          <small className="sort"><a href="/posts?sortBy=controversial">By Controversial</a></small>
+        </div>
+
         <% posts.forEach(post => { %>
         <div class="individualPost">
           <a href="/posts/show/<%=post.id%>"><%= post.title %></a>

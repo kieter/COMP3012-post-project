@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "./middleware/passport";
 const PORT = process.env.PORT || 8000;
-
+// need to fix above to 8000
 const app = express();
 
 app.set("trust proxy", 1);

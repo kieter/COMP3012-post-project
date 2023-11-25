@@ -1,0 +1,11 @@
+<div style="width: 500px">
+  <form action="/comments/edit/<%= comment.id %>" method="POST">
+
+    <label for="comment">Add your thoughts<span>*</span>:</label><br />
+    <textarea id="comment" name="comment" rows="4" cols="50" required><%= comment.description %></textarea
+    ><br /><br />
+
+    <input type="submit" value="Save change" />
+    
+  </form>
+</div>

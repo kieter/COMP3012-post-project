@@ -50,3 +50,24 @@
 .vote-active-button {
   background-color: hsl(195, 80%, 50%);
 }
+
+.sortParent{
+  display:flex;
+
+}
+
+.sortParent small{
+  width:15%;
+  margin:1%;
+  background-color: hsl(195, 80%, 50%);
+  border-radius: 5px;
+  text-align: center;
+  
+}
+
+.sortParent small a{
+color:white;
+font-size: small;
+
+
+}

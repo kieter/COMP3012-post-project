@@ -11,8 +11,18 @@ import { getPost, editPost, deletePost } from "../controller/postController";
 
 
 router.get("/", async (req, res) => {
-  const posts = await database.getPosts(20);
+  let posts = await database.getPosts(20);
   const user =  req.user;
+ 
+  if (req.query.sortBy === 'date') {
+    posts.sort((a, b) => b.timestamp - a.timestamp)
+  }else if (req.query.sortBy === 'vote') {
+   posts = await database.sortByVote(posts)
+  }else if (req.query.sortBy === 'hot'){
+    posts = await database.sortByHot(posts)
+  }else if (req.query.sortBy === 'controversial'){
+    posts = await database.sortByControvatial(posts)
+  }
   res.render("posts", { posts, user, getUser });
 });
 
@@ -43,6 +53,7 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
   const user = await req.user;
+
 
   //If not post found redirect to home
   if (!post) {
@@ -102,7 +113,7 @@ router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
     res.redirect(`/posts/show/${postId}`);
   }
 });
-
+//comment
 router.post(
   "/comment-create/:postid",
   ensureAuthenticated,

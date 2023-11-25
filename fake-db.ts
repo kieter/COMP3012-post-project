@@ -58,8 +58,8 @@ const comments = {
 const votes = [
   { user_id: 2, post_id: 101, value: +1 },
   { user_id: 3, post_id: 101, value: +1 },
-  { user_id: 4, post_id: 101, value: +1 },
-  { user_id: 3, post_id: 102, value: -1 },
+  { user_id: 4, post_id: 101, value: -1 },
+  { user_id: 3, post_id: 102, value: +3 },
 ];
 
 function debug() {
@@ -98,6 +98,7 @@ function createUser(uname, password) {
 
 function getVotesForPost(post_id) {
   return votes.filter((vote) => vote.post_id === post_id);
+
 }
 
 function insertOrUpdateVotesForPost(
@@ -134,7 +135,7 @@ function decoratePost(post) {
  * @param {*} n how many posts to get, defaults to 5
  * @param {*} sub which sub to fetch, defaults to all subs
  */
-function getPosts(n = 5, sub = undefined) {
+function getPosts(n = 5, sub: string = undefined) {
   let allPosts = Object.values(posts);
   if (sub) {
     allPosts = allPosts.filter((post) => post.subgroup === sub);
@@ -215,6 +216,19 @@ function deleteComment(id) {
   delete comments[id];
 }
 
+
+function updateComment(id,comment){
+  if (!getComment(id)) return null;
+  comments[id] = { ...comments[id], ...comment };
+  return comments[id]
+}
+
+function countComment(post_id){
+  const commentArray = Object.values(comments);
+  const number = commentArray.filter((comment) => comment.post_id === post_id).length;
+  return number
+}
+
 export {
   debug,
   getUser,
@@ -224,10 +238,13 @@ export {
   addPost,
   editPost,
   deletePost,
+  getVotesForPost,
   getSubs,
   addComment,
   getComment,
   deleteComment,
+  updateComment,
+  countComment,
   decoratePost,
   insertOrUpdateVotesForPost,
   createUser,

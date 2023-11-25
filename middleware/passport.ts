@@ -42,7 +42,6 @@ const localRegister = new LocalStrategy(
 
 // ⭐ TODO: Passport Types
 passport.serializeUser(function (user: any, done: any) {
-  console.log("serialize: " + user.id);
   done(null, user.id);
 });
 
