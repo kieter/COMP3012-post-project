@@ -26,7 +26,7 @@ router.get("/edit/:commentid", ensureAuthenticated, async (req, res) => {
     comment,
     user: await req.user,
   };
-  res.render("helpers/edditcomment", data)
+  res.render("helpers/editComment", data)
 })
 
 router.post("/edit/:commentid", ensureAuthenticated, async (req, res) => {
