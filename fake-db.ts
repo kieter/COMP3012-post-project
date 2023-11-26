@@ -81,7 +81,7 @@ function isUsernameTaken(uname) {
 
 function getUserByUsername(uname: any) {
   return getUser(
-    Object.values(users).filter((user) => user.uname === uname)[0]?.id
+    Object.values(users).filter((user) => user.uname === uname)[0]?.id,
   );
 }
 
@@ -98,16 +98,15 @@ function createUser(uname, password) {
 
 function getVotesForPost(post_id) {
   return votes.filter((vote) => vote.post_id === post_id);
-
 }
 
 function insertOrUpdateVotesForPost(
   post_id: number,
   user_id: number,
-  value: number
+  value: number,
 ) {
   const findVote = votes.findIndex(
-    (vote) => vote.post_id == post_id && vote.user_id == user_id
+    (vote) => vote.post_id == post_id && vote.user_id == user_id,
   );
 
   if (findVote >= 0) {
@@ -216,28 +215,31 @@ function deleteComment(id) {
   delete comments[id];
 }
 
-
-function editComment(id, edit){
+function editComment(id, edit) {
   if (!getComment(id)) return null;
   const oldComment = getComment(id);
   const newComment = {
     ...getComment(id),
     post_id: oldComment.post_id,
     creator: oldComment.creator.id,
-    description: edit.comment
-  }
+    description: edit.comment,
+  };
   comments[id] = newComment;
   return newComment;
 }
 
-function countComment(post_id){
+function countComment(post_id) {
   const commentArray = Object.values(comments);
-  const number = commentArray.filter((comment) => comment.post_id === post_id).length;
-  return number
+  const number = commentArray.filter(
+    (comment) => comment.post_id === post_id,
+  ).length;
+  return number;
 }
 
 function getCommentsForPost(post_id: number) {
-  return Object.values(comments).filter((comment) => comment.post_id === post_id);
+  return Object.values(comments).filter(
+    (comment) => comment.post_id === post_id,
+  );
 }
 
 export {

@@ -11,17 +11,20 @@ router.post(
   passport.authenticate("localLogin", {
     successRedirect: "/posts",
     failureRedirect: "/auth/login",
-  })
+  }),
 );
 
-router.get('/register', (req, res) => {
-  res.render('register')
-})
+router.get("/register", (req, res) => {
+  res.render("register");
+});
 
-router.post('/register', passport.authenticate('localRegister', {
-  successRedirect: '/posts',
-  failureRedirect: '/auth/register'
-}));
+router.post(
+  "/register",
+  passport.authenticate("localRegister", {
+    successRedirect: "/posts",
+    failureRedirect: "/auth/register",
+  }),
+);
 
 router.get("/logout", (req, res, next) => {
   req.logout(function (err) {

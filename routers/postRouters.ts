@@ -9,23 +9,21 @@ import {
 } from "../middleware/checkAuth";
 import { getPost, editPost, deletePost } from "../controller/postController";
 
-
 router.get("/", async (req, res) => {
   let posts = await database.getPosts(20);
-  const user =  req.user;
- 
-  if (req.query.sortBy === 'date') {
-    posts.sort((a, b) => b.timestamp - a.timestamp)
-  }else if (req.query.sortBy === 'vote') {
-   posts = await database.sortByVote(posts)
-  }else if (req.query.sortBy === 'hot'){
-    posts = await database.sortByHot(posts)
-  }else if (req.query.sortBy === 'controversial'){
-    posts = await database.sortByControvatial(posts)
+  const user = req.user;
+
+  if (req.query.sortBy === "date") {
+    posts.sort((a, b) => b.timestamp - a.timestamp);
+  } else if (req.query.sortBy === "vote") {
+    posts = await database.sortByVote(posts);
+  } else if (req.query.sortBy === "hot") {
+    posts = await database.sortByHot(posts);
+  } else if (req.query.sortBy === "controversial") {
+    posts = await database.sortByControvatial(posts);
   }
   res.render("posts", { posts, user, getUser });
 });
-
 
 router.get("/create", ensureAuthenticated, (req, res) => {
   res.render("createPosts", { user: req.user });
@@ -43,7 +41,7 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
     link,
     user.id,
     description,
-    subgroup
+    subgroup,
   );
 
   //Redirect to the new Post once created
@@ -54,7 +52,6 @@ router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
   const user = await req.user;
 
-
   //If not post found redirect to home
   if (!post) {
     return res.render("404NotFound");
@@ -62,7 +59,7 @@ router.get("/show/:postid", async (req, res) => {
 
   const data = {
     post,
-    user
+    user,
   };
 
   res.render("individualPost", data);
@@ -96,7 +93,7 @@ router.get(
   async (req, res) => {
     const post = await getPost(req.params.postid);
     res.render("deleteConfirmPost", { post, user: req.user });
-  }
+  },
 );
 
 router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
@@ -123,7 +120,7 @@ router.post(
     const user = await req.user;
     await database.addComment(postId, user.id, comment);
     res.redirect(`/posts/show/${postId}`);
-  }
+  },
 );
 
 //vote System

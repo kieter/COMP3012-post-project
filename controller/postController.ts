@@ -16,7 +16,7 @@ async function addPost(
   link: string,
   creator: number,
   description: string,
-  subgroup: string
+  subgroup: string,
 ) {
   return db.addPost(title, link, creator, description, subgroup);
 }
@@ -27,7 +27,7 @@ async function editPost(
     title?: string;
     link?: string;
     description?: string;
-  }
+  },
 ) {
   return db.editPost(postId, changes);
 }
@@ -42,7 +42,7 @@ async function deletePost(postId: number) {
 async function addComment(
   post_id: number,
   creator: number,
-  description: string
+  description: string,
 ) {
   return db.addComment(post_id, creator, description);
 }
@@ -73,7 +73,7 @@ async function deleteComment(commentId: number) {
 async function getVotes(postId: number, activeUser: number) {
   const post = await getPost(postId);
   const userVote = post.votes.filter(
-    (p: { user_id: number }) => p.user_id == activeUser
+    (p: { user_id: number }) => p.user_id == activeUser,
   );
   return userVote[0];
 }
@@ -92,89 +92,111 @@ async function updateVotes(post_id: number, user_id: number, action: string) {
   //Return the new Counted value
   let newValue = post.votes.reduce(
     (cur: number, { value }: { value: number }) => cur + value,
-    0
+    0,
   );
 
   return { newValue, value };
 }
 //count the vote amount
-async function totalVote(post_id:number){
-  const allVoteByPostId = await db.getVotesForPost(post_id)
-  const voteTotal = await allVoteByPostId.reduce((acc, vote) => acc + vote.value, 0);
-return voteTotal
+async function totalVote(post_id: number) {
+  const allVoteByPostId = await db.getVotesForPost(post_id);
+  const voteTotal = await allVoteByPostId.reduce(
+    (acc, vote) => acc + vote.value,
+    0,
+  );
+  return voteTotal;
 }
 
-async function totalControvatialVote(post_id:number){
-  const allVoteByPostId = await db.getVotesForPost(post_id)
+async function totalControvatialVote(post_id: number) {
+  const allVoteByPostId = await db.getVotesForPost(post_id);
   const voteTotal = await allVoteByPostId.length;
-return voteTotal
+  return voteTotal;
 }
 
-async function sortByVote(array:any) {
-  const allVotes = await Promise.all(array.map(async (post:any) => {
-    return {
-      postId: post.id,
-      votes: await totalVote(post.id),
-    };
-  }));
+async function sortByVote(array: any) {
+  const allVotes = await Promise.all(
+    array.map(async (post: any) => {
+      return {
+        postId: post.id,
+        votes: await totalVote(post.id),
+      };
+    }),
+  );
   const addVoteValue = allVotes.map(({ postId, votes }) => ({
     postId,
-    postDetails: array.find((post:any) => post.id === postId),
+    postDetails: array.find((post: any) => post.id === postId),
     votes,
   }));
-  const sortedPosts = addVoteValue.sort((a, b) => b.votes - a.votes).map(({ postDetails }) => postDetails);
+  const sortedPosts = addVoteValue
+    .sort((a, b) => b.votes - a.votes)
+    .map(({ postDetails }) => postDetails);
   return sortedPosts;
 }
 
-async function sortByControvatial(array:any) {
-  const allVotes = await Promise.all(array.map(async (post:any) => {
-    return {
-      postId: post.id,
-      votes: await totalControvatialVote(post.id),
-    };
-  }));
+async function sortByControvatial(array: any) {
+  const allVotes = await Promise.all(
+    array.map(async (post: any) => {
+      return {
+        postId: post.id,
+        votes: await totalControvatialVote(post.id),
+      };
+    }),
+  );
   const addVoteValue = allVotes.map(({ postId, controvvatialVotes }) => ({
     postId,
-    postDetails: array.find((post:any) => post.id === postId),
+    postDetails: array.find((post: any) => post.id === postId),
     controvvatialVotes,
   }));
-  const sortedPosts = addVoteValue.sort((a, b) => b.controvvatialVotes - a.controvvatialVotes).map(({ postDetails }) => postDetails);
+  const sortedPosts = addVoteValue
+    .sort((a, b) => b.controvvatialVotes - a.controvvatialVotes)
+    .map(({ postDetails }) => postDetails);
   return sortedPosts;
 }
 
-function calculateHotScore(totalLikes:number, commentNumber:number, postTimestamp:number) {
+function calculateHotScore(
+  totalLikes: number,
+  commentNumber: number,
+  postTimestamp: number,
+) {
   const currentTimestamp = new Date().getTime();
   const timeDifference = currentTimestamp - postTimestamp;
-  const score = totalLikes + commentNumber / 2 + 1 / Math.sqrt(timeDifference + 1);
+  const score =
+    totalLikes + commentNumber / 2 + 1 / Math.sqrt(timeDifference + 1);
   return score;
 }
 
-async function sortByHot(array:any) {
-  const allVotes = await Promise.all(array.map(async (post:any) => {
-    return {
-      postId: post.id,
-      votes: await totalVote(post.id),
-      comments: await db.countComment(post.id),
-      timestamp: post.timestamp,
-    };
-  }));
-  const addHotValue = await Promise.all(allVotes.map(async(e:any)=>{
-    const postDetails = await array.find((postItem:any) => e.postId === postItem.id);
-    return{
-    postId: e.postId,
-    hotnumber: await calculateHotScore(e.votes, e.comments, e.timestamp),
-    postDetails,
-    }
-  }))
-  const sortedPosts = addHotValue.sort((a, b) => b.hotnumber - a.hotnumber).map(({ postDetails }:any) => postDetails);
+async function sortByHot(array: any) {
+  const allVotes = await Promise.all(
+    array.map(async (post: any) => {
+      return {
+        postId: post.id,
+        votes: await totalVote(post.id),
+        comments: await db.countComment(post.id),
+        timestamp: post.timestamp,
+      };
+    }),
+  );
+  const addHotValue = await Promise.all(
+    allVotes.map(async (e: any) => {
+      const postDetails = await array.find(
+        (postItem: any) => e.postId === postItem.id,
+      );
+      return {
+        postId: e.postId,
+        hotnumber: await calculateHotScore(e.votes, e.comments, e.timestamp),
+        postDetails,
+      };
+    }),
+  );
+  const sortedPosts = addHotValue
+    .sort((a, b) => b.hotnumber - a.hotnumber)
+    .map(({ postDetails }: any) => postDetails);
   return sortedPosts;
 }
 
 async function getCommentsForPost(postId: number) {
   return db.getCommentsForPost(postId);
 }
-
-
 
 export {
   getPosts,
@@ -191,5 +213,5 @@ export {
   sortByVote,
   sortByControvatial,
   sortByHot,
-  getCommentsForPost
+  getCommentsForPost,
 };

@@ -4,7 +4,6 @@ import * as database from "../controller/postController";
 const router = express.Router();
 import { ensureAuthenticated } from "../middleware/checkAuth";
 
-
 router.get("/show/:commentid", ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentid;
   const comment = await database.getComment(commentId);
@@ -26,17 +25,16 @@ router.get("/edit/:commentid", ensureAuthenticated, async (req, res) => {
     comment,
     user: await req.user,
   };
-  res.render("helpers/editComment", data)
-})
+  res.render("helpers/editComment", data);
+});
 
 router.post("/edit/:commentid", ensureAuthenticated, async (req, res) => {
   const newComment = req.body;
   const commentId = parseInt(req.params.commentid);
   const comment = await database.editComment(commentId, newComment);
   const postId = comment.post_id;
-  res.redirect(`/posts/show/${postId}`)
-})
-
+  res.redirect(`/posts/show/${postId}`);
+});
 
 router.get("/deleteconfirm/:commentid", ensureAuthenticated, (req, res) => {
   const commentId = req.params.commentid;
