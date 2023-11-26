@@ -19,25 +19,23 @@ router.get("/show/:commentid", ensureAuthenticated, async (req, res) => {
   res.render("helpers/comment", data);
 });
 
-router.get("/edit/:commentid",ensureAuthenticated,async (req, res) => {
+router.get("/edit/:commentid", ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentid;
   const comment = await database.getComment(commentId);
   const data = {
     comment,
     user: await req.user,
   };
-  res.render("helpers/edditcomment",data)
+  res.render("helpers/edditcomment", data)
 })
 
-// router.post("/edit/:commentid",ensureAuthenticated,async (req, res) => {
-//   const newComment = req.body;
-//   const commentId = parseInt(req.params.commentid);
-//   const comment = await database.editComment(commentId, newComment);
-//   const postId = comment.post_id
-  
-//   // change was made, but cannot redirect..
-//   // res.redirect(`/posts/show/${postId}`)
-// })
+router.post("/edit/:commentid", ensureAuthenticated, async (req, res) => {
+  const newComment = req.body;
+  const commentId = parseInt(req.params.commentid);
+  const comment = await database.editComment(commentId, newComment);
+  const postId = comment.post_id;
+  res.redirect(`/posts/show/${postId}`)
+})
 
 
 router.get("/deleteconfirm/:commentid", ensureAuthenticated, (req, res) => {

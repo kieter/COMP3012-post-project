@@ -217,16 +217,27 @@ function deleteComment(id) {
 }
 
 
-function updateComment(id,comment){
+function editComment(id, edit){
   if (!getComment(id)) return null;
-  comments[id] = { ...comments[id], ...comment };
-  return comments[id]
+  const oldComment = getComment(id);
+  const newComment = {
+    ...getComment(id),
+    post_id: oldComment.post_id,
+    creator: oldComment.creator.id,
+    description: edit.comment
+  }
+  comments[id] = newComment;
+  return newComment;
 }
 
 function countComment(post_id){
   const commentArray = Object.values(comments);
   const number = commentArray.filter((comment) => comment.post_id === post_id).length;
   return number
+}
+
+function getCommentsForPost(post_id: number) {
+  return Object.values(comments).filter((comment) => comment.post_id === post_id);
 }
 
 export {
@@ -243,10 +254,11 @@ export {
   addComment,
   getComment,
   deleteComment,
-  updateComment,
+  editComment,
   countComment,
   decoratePost,
   insertOrUpdateVotesForPost,
   createUser,
-  isUsernameTaken
+  isUsernameTaken,
+  getCommentsForPost,
 };

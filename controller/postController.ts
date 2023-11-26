@@ -60,11 +60,8 @@ async function getComment(commentId: number) {
 }
 
 //EditComment
-async function editComment(id: number, newComment: any) {
-  let comment = await db.getComment(id);
-  comment.description = newComment.comment;
-  await db.updateComment(id, comment);
-  return await comment;
+async function editComment(id: number, edit: string) {
+  return db.editComment(id, edit);
 }
 
 // delete a new comment
@@ -173,6 +170,10 @@ async function sortByHot(array:any) {
   return sortedPosts;
 }
 
+async function getCommentsForPost(postId: number) {
+  return db.getCommentsForPost(postId);
+}
+
 
 
 export {
@@ -190,4 +191,5 @@ export {
   sortByVote,
   sortByControvatial,
   sortByHot,
+  getCommentsForPost
 };

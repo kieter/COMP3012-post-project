@@ -62,7 +62,7 @@ router.get("/show/:postid", async (req, res) => {
 
   const data = {
     post,
-    user,
+    user
   };
 
   res.render("individualPost", data);

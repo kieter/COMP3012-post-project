@@ -1,0 +1,21 @@
+<div style="width: 500px">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"
+    />
+    <link href="/css/style.css" rel="stylesheet" />
+    <title>Post</title>
+  </head>
+  <form action="/comments/edit/<%= comment.id %>" method="POST">
+
+    <label for="comment">Add your thoughts<span>*</span>:</label><br />
+    <textarea id="comment" name="comment" rows="4" cols="50" required><%= comment.description %></textarea
+    ><br /><br />
+
+    <input type="submit" value="Save change" />
+  </form>
+</div>
