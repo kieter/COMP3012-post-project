@@ -35,7 +35,9 @@
 
           <%- include("./helpers/votes.ejs") %>
         </div>
-
+        <% if (post.creator.id === user.id) { %>
+          <a role="button" href=`/posts/${post.id}/edit`>Edit</a>
+        <% } %>
         <hr />
         <div>
           <h4>Comments</h4>
