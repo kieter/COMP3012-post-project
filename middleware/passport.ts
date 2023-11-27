@@ -21,7 +21,7 @@ const localLogin = new LocalStrategy(
       : done(null, false, {
           message: "Your login details are not valid. Please try again.",
         });
-  }
+  },
 );
 
 const localRegister = new LocalStrategy(
@@ -37,7 +37,7 @@ const localRegister = new LocalStrategy(
       : done(null, false, {
           message: "Your login details are not valid. Please try again.",
         });
-  }
+  },
 );
 
 // ⭐ TODO: Passport Types
@@ -55,7 +55,7 @@ passport.deserializeUser(async function (id: any, done: any) {
   }
 });
 
-passport.use('localLogin', localLogin);
-passport.use('localRegister', localRegister);
+passport.use("localLogin", localLogin);
+passport.use("localRegister", localRegister);
 
 export default passport;

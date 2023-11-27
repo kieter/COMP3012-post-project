@@ -26,6 +26,7 @@
     "@types/passport": "^1.0.14",
     "@types/passport-local": "^1.0.37",
     "nodemon": "^2.0.20",
+    "prettier": "3.1.0",
     "prisma": "^4.11.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"

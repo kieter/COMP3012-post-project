@@ -7,7 +7,11 @@ function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
   res.redirect("/auth/login");
 }
 
-async function ensureAuthenticatedAsUserId(req: Request, res: Response, next: NextFunction) {
+async function ensureAuthenticatedAsUserId(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   if (!req.isAuthenticated()) {
     return res.redirect("/auth/login");
   }
@@ -25,7 +29,7 @@ async function ensureAuthenticatedAsUserId(req: Request, res: Response, next: Ne
       return next();
     }
 
-    res.render("403Forbidden")
+    res.render("403Forbidden");
   } catch (error) {
     console.error(error);
     res.redirect("/auth/login");
@@ -38,4 +42,8 @@ function forwardAuthenticated(req: Request, res: Response, next: NextFunction) {
   }
   res.redirect("/");
 }
-export { ensureAuthenticated, forwardAuthenticated, ensureAuthenticatedAsUserId };
+export {
+  ensureAuthenticated,
+  forwardAuthenticated,
+  ensureAuthenticatedAsUserId,
+};

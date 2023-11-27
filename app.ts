@@ -18,7 +18,7 @@ app.use(
       secure: false, // HTTPS Required
       maxAge: 24 * 60 * 60 * 1000,
     },
-  })
+  }),
 );
 
 import indexRoute from "./routers/indexRoute";
@@ -39,5 +39,5 @@ app.use("/comments", commentRouters);
 app.use("/", indexRoute);
 
 app.listen(PORT, () =>
-  console.log(`server should be running at http://localhost:${PORT}/`)
+  console.log(`server should be running at http://localhost:${PORT}/`),
 );
