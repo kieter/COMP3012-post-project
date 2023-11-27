@@ -67,7 +67,7 @@ router.get("/show/:postid", async (req, res) => {
 
 router.get("/edit/:postid", ensureAuthenticatedAsUserId, async (req, res) => {
   const post = await getPost(req.params.postid);
-  res.render("editPost", { post });
+  res.render("editPost", { post, user: req.user });
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
