@@ -59,6 +59,9 @@ async function getComment(commentId: number) {
   return db.getComment(commentId);
 }
 
+interface CommentUpdate {
+  comment: string;
+}
 //EditComment
 async function editComment(id: number, newComment: any) {
   let comment = await db.getComment(id);
@@ -70,6 +73,19 @@ async function editComment(id: number, newComment: any) {
 // delete a new comment
 async function deleteComment(commentId: number) {
   return db.deleteComment(commentId);
+}
+
+//create new reply
+async function addReply(
+  commentId:number,
+  creator: number,
+  description: string
+) {
+  return db.addReply(commentId, creator, description);
+}
+
+async function getReply(commentId:number){
+  return db.getReply(commentId)
 }
 
 //Vote section
@@ -190,4 +206,6 @@ export {
   sortByVote,
   sortByControvatial,
   sortByHot,
+  getReply,
+  addReply,
 };

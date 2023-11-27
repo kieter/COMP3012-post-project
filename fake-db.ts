@@ -54,12 +54,22 @@ const comments = {
     timestamp: 1642691742010,
   },
 };
+// for replies
+const replies = {
+  90011: {id: 90011,
+    comment_id:9001,
+    post_id: 102,
+    creator: 1,
+    description: "Reply to 9001",
+    timestamp: 1642691742010,},
+
+}
 
 const votes = [
   { user_id: 2, post_id: 101, value: +1 },
   { user_id: 3, post_id: 101, value: +1 },
-  { user_id: 4, post_id: 101, value: -1 },
-  { user_id: 3, post_id: 102, value: +3 },
+  { user_id: 4, post_id: 101, value: +1 },
+  { user_id: 3, post_id: 102, value: -1 },
 ];
 
 function debug() {
@@ -229,6 +239,27 @@ function countComment(post_id){
   return number
 }
 
+function getReply(commentid) {
+  //Check there is a post
+  replies.filter(reply=>reply.comment_id===commentid)
+  if (!replies[id]) return null;
+  return replies.filter(reply=>reply.comment_id===commentid);
+}
+
+function addReply( commentId,creator, description) {
+  let id = Math.max(...Object.keys(replies).map(Number)) + 1;
+  let reply = {
+    id,
+    post_id: Number(comments[commentId].post_id),
+    comment_id:Number(commentId),
+    creator: Number(creator),
+    description,
+    timestamp: Date.now(),
+  };
+  replies[id] = reply;
+  return reply;
+}
+
 export {
   debug,
   getUser,
@@ -248,5 +279,7 @@ export {
   decoratePost,
   insertOrUpdateVotesForPost,
   createUser,
-  isUsernameTaken
+  isUsernameTaken,
+  addReply,
+  getReply,
 };

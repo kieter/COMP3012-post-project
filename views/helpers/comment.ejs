@@ -18,9 +18,23 @@
     <% if(user && comment.creator.id == user.id) { %>
     <a href="/comments/deleteConfirm/<%= comment.id%>">Delete</a>
     <a href="/comments/edit/<%= comment.id%>">Edit</a>
-    <a href="/comments/reply/<%= comment.id%>">Reply</a>
     <% } %>
+    <a onClick =toggleReply() >Reply</a>
     
-
+    <p style="padding:3px 0px 5px 10px; margin:0;"><span>⇒</span>this will be reply description</p>
+    <small style="padding-left:10px">this wii be name and timestamp</small>
+    
+    <form action="/comments/reply/<%= comment.id %>" method="post" id="reply" style="display: none">
+      <p style="font-size: small; margin-bottom:0;">Add your Reply:</p>
+      <textarea id="myTextarea" name="comment"></textarea>
+      <input type="submit" style="padding:5 10px; border-radius: 5px;"
+      value ="Save"/>
+    </form>
   </div>
 </div>
+<script>
+  function toggleReply() {
+    let reply = document.getElementById('reply');
+    reply.style.display = (reply.style.display === 'none' || reply.style.display === '') ? 'block' : 'none';
+  }
+</script>
