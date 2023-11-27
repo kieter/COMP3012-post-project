@@ -259,13 +259,20 @@ function getReply(commentid) {
   return replies.filter(reply=>reply.comment_id===commentid);
 }
 
+function getReplybyPost(postId) {
+  //Check there is a post
+  const replyArray = Object.values(replies);
+  const result = replyArray.filter(reply => reply.post_id === postId)
+  return result
+}
+
 function addReply( commentId,creator, description) {
   let id = Math.max(...Object.keys(replies).map(Number)) + 1;
   let reply = {
     id,
     post_id: Number(comments[commentId].post_id),
     comment_id:Number(commentId),
-    creator: Number(creator),
+    creator: getUser(Number(creator)),
     description,
     timestamp: Date.now(),
   };
@@ -296,4 +303,5 @@ export {
   addReply,
   getReply,
   getCommentsForPost,
+  getReplybyPost,
 };

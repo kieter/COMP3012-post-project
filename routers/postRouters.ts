@@ -51,15 +51,15 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
   const user = await req.user;
-
+  const reply = await database.getReplybyPost(post.id)
   //If not post found redirect to home
   if (!post) {
     return res.render("404NotFound");
   }
-
   const data = {
     post,
     user,
+    reply
   };
 
   res.render("individualPost", data);
@@ -82,7 +82,6 @@ router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
     });
     res.redirect(`/posts/show/${postId}`);
   } catch (e) {
-    console.log(e);
     res.redirect("/posts");
   }
 });
@@ -106,7 +105,6 @@ router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
     await deletePost(postId);
     res.redirect(`/subs/show/${postSubgroup}`);
   } catch (e) {
-    console.log(e);
     res.redirect(`/posts/show/${postId}`);
   }
 });

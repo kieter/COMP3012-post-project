@@ -44,7 +44,7 @@
             <ul class="timeline">
               <% post.comments.forEach(function(comment) { %>
               <li style="list-style-type: none">
-                <%- include("./helpers/comment", {comment, user}) %>
+                <%- include("./helpers/comment", {comment, user, reply}) %>
               </li>
               <hr />
               <% }) %>

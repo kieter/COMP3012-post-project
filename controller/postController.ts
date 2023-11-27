@@ -1,6 +1,6 @@
 import * as db from "../fake-db";
 
-// Make calls to your db from this file!
+// Make calls to your db from this file!f
 async function getPosts(n = 5, sub = undefined) {
   return db.getPosts(n, sub);
 }
@@ -85,6 +85,11 @@ async function getReply(commentId:number){
   return db.getReply(commentId)
 }
 
+async function getReplybyPost(postId:number) {
+  //Check there is a post
+  return db.getReplybyPost(postId)
+}
+
 //Vote section
 async function getVotes(postId: number, activeUser: number) {
   const post = await getPost(postId);
@@ -129,9 +134,21 @@ async function totalControvatialVote(post_id: number) {
   return voteTotal;
 }
 
-async function sortByVote(array: any) {
+type Post={
+  id: number,
+  title: string,
+  link: string,
+  description: string,
+  creator: { id: number, uname: string, password: string },
+  subgroup: string,
+  timestamp: number,
+  votes?: [],
+  comments?: []
+}
+
+async function sortByVote(array: Post[]) {
   const allVotes = await Promise.all(
-    array.map(async (post: any) => {
+    array.map(async (post: Post) => {
       return {
         postId: post.id,
         votes: await totalVote(post.id),
@@ -140,7 +157,7 @@ async function sortByVote(array: any) {
   );
   const addVoteValue = allVotes.map(({ postId, votes }) => ({
     postId,
-    postDetails: array.find((post: any) => post.id === postId),
+    postDetails: array.find((post: Post) => post.id === postId),
     votes,
   }));
   const sortedPosts = addVoteValue
@@ -151,16 +168,16 @@ async function sortByVote(array: any) {
 
 async function sortByControvatial(array: any) {
   const allVotes = await Promise.all(
-    array.map(async (post: any) => {
+    array.map(async (post: Post) => {
       return {
-        postId: post.id,
+        postId : post.id,
         votes: await totalControvatialVote(post.id),
       };
     }),
   );
   const addVoteValue = allVotes.map(({ postId, controvvatialVotes }) => ({
     postId,
-    postDetails: array.find((post: any) => post.id === postId),
+    postDetails: array.find((post: Post) => post.id === postId),
     controvvatialVotes,
   }));
   const sortedPosts = addVoteValue
@@ -180,10 +197,10 @@ function calculateHotScore(
     totalLikes + commentNumber / 2 + 1 / Math.sqrt(timeDifference + 1);
   return score;
 }
-
-async function sortByHot(array: any) {
+interface NumbersforHot { postId: number, votes: number, comments: number, timestamp: number }
+async function sortByHot(array:Post[]) {
   const allVotes = await Promise.all(
-    array.map(async (post: any) => {
+    array.map(async (post: Post) => {
       return {
         postId: post.id,
         votes: await totalVote(post.id),
@@ -193,9 +210,9 @@ async function sortByHot(array: any) {
     }),
   );
   const addHotValue = await Promise.all(
-    allVotes.map(async (e: any) => {
+    allVotes.map(async (e: NumbersforHot) => {
       const postDetails = await array.find(
-        (postItem: any) => e.postId === postItem.id,
+        (postItem: Post) => e.postId === postItem.id,
       );
       return {
         postId: e.postId,
@@ -205,8 +222,8 @@ async function sortByHot(array: any) {
     }),
   );
   const sortedPosts = addHotValue
-    .sort((a, b) => b.hotnumber - a.hotnumber)
-    .map(({ postDetails }: any) => postDetails);
+  .sort((a, b) => b.hotnumber - a.hotnumber)
+  .map(({ postDetails }) => postDetails);
   return sortedPosts;
 }
 
@@ -232,4 +249,5 @@ export {
   getCommentsForPost,
   getReply,
   addReply,
+  getReplybyPost,
 };
