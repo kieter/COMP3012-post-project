@@ -74,20 +74,20 @@ async function deleteComment(commentId: number) {
 
 //create new reply
 async function addReply(
-  commentId:number,
+  commentId: number,
   creator: number,
-  description: string
+  description: string,
 ) {
   return db.addReply(commentId, creator, description);
 }
 
-async function getReply(commentId:number){
-  return db.getReply(commentId)
+async function getReply(commentId: number) {
+  return db.getReply(commentId);
 }
 
-async function getReplybyPost(postId:number) {
+async function getReplybyPost(postId: number) {
   //Check there is a post
-  return db.getReplybyPost(postId)
+  return db.getReplybyPost(postId);
 }
 
 //Vote section
@@ -134,17 +134,17 @@ async function totalControvatialVote(post_id: number) {
   return voteTotal;
 }
 
-type Post={
-  id: number,
-  title: string,
-  link: string,
-  description: string,
-  creator: { id: number, uname: string, password: string },
-  subgroup: string,
-  timestamp: number,
-  votes?: [],
-  comments?: []
-}
+type Post = {
+  id: number;
+  title: string;
+  link: string;
+  description: string;
+  creator: { id: number; uname: string; password: string };
+  subgroup: string;
+  timestamp: number;
+  votes?: [];
+  comments?: [];
+};
 
 async function sortByVote(array: Post[]) {
   const allVotes = await Promise.all(
@@ -170,7 +170,7 @@ async function sortByControvatial(array: any) {
   const allVotes = await Promise.all(
     array.map(async (post: Post) => {
       return {
-        postId : post.id,
+        postId: post.id,
         votes: await totalControvatialVote(post.id),
       };
     }),
@@ -197,8 +197,13 @@ function calculateHotScore(
     totalLikes + commentNumber / 2 + 1 / Math.sqrt(timeDifference + 1);
   return score;
 }
-interface NumbersforHot { postId: number, votes: number, comments: number, timestamp: number }
-async function sortByHot(array:Post[]) {
+interface NumbersforHot {
+  postId: number;
+  votes: number;
+  comments: number;
+  timestamp: number;
+}
+async function sortByHot(array: Post[]) {
   const allVotes = await Promise.all(
     array.map(async (post: Post) => {
       return {
@@ -222,8 +227,8 @@ async function sortByHot(array:Post[]) {
     }),
   );
   const sortedPosts = addHotValue
-  .sort((a, b) => b.hotnumber - a.hotnumber)
-  .map(({ postDetails }) => postDetails);
+    .sort((a, b) => b.hotnumber - a.hotnumber)
+    .map(({ postDetails }) => postDetails);
   return sortedPosts;
 }
 

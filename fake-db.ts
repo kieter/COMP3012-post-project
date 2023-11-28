@@ -56,14 +56,15 @@ const comments = {
 };
 // for replies
 const replies = {
-  90011: {id: 90011,
-    comment_id:9001,
+  90011: {
+    id: 90011,
+    comment_id: 9001,
     post_id: 102,
     creator: 1,
     description: "Reply to 9001",
-    timestamp: 1642691742010,},
-
-}
+    timestamp: 1642691742010,
+  },
+};
 
 const votes = [
   { user_id: 2, post_id: 101, value: +1 },
@@ -254,24 +255,24 @@ function getCommentsForPost(post_id: number) {
 
 function getReply(commentid) {
   //Check there is a post
-  replies.filter(reply=>reply.comment_id===commentid)
+  replies.filter((reply) => reply.comment_id === commentid);
   if (!replies[id]) return null;
-  return replies.filter(reply=>reply.comment_id===commentid);
+  return replies.filter((reply) => reply.comment_id === commentid);
 }
 
 function getReplybyPost(postId) {
   //Check there is a post
   const replyArray = Object.values(replies);
-  const result = replyArray.filter(reply => reply.post_id === postId)
-  return result
+  const result = replyArray.filter((reply) => reply.post_id === postId);
+  return result;
 }
 
-function addReply( commentId,creator, description) {
+function addReply(commentId, creator, description) {
   let id = Math.max(...Object.keys(replies).map(Number)) + 1;
   let reply = {
     id,
     post_id: Number(comments[commentId].post_id),
-    comment_id:Number(commentId),
+    comment_id: Number(commentId),
     creator: getUser(Number(creator)),
     description,
     timestamp: Date.now(),

@@ -51,7 +51,7 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 router.get("/show/:postid", async (req, res) => {
   const post = await database.getPost(req.params.postid);
   const user = await req.user;
-  const reply = await database.getReplybyPost(post.id)
+  const reply = await database.getReplybyPost(post.id);
   //If not post found redirect to home
   if (!post) {
     return res.render("404NotFound");
@@ -59,7 +59,7 @@ router.get("/show/:postid", async (req, res) => {
   const data = {
     post,
     user,
-    reply
+    reply,
   };
 
   res.render("individualPost", data);

@@ -41,13 +41,13 @@ router.get("/deleteconfirm/:commentid", ensureAuthenticated, (req, res) => {
   res.render("helpers/deleteConfirmComment", { commentId });
 });
 
-router.post("/reply/:commentId",ensureAuthenticated, async(req, res) => {
-  const commentId = req.params.commentId
-   const { comment } = req.body;
-   const user = await req.user;
-   const result = await database.addReply(commentId,user.id, comment);
-   res.redirect(`/posts/show/${result.post_id}`);
- })
+router.post("/reply/:commentId", ensureAuthenticated, async (req, res) => {
+  const commentId = req.params.commentId;
+  const { comment } = req.body;
+  const user = await req.user;
+  const result = await database.addReply(commentId, user.id, comment);
+  res.redirect(`/posts/show/${result.post_id}`);
+});
 
 router.post("/delete/:commentid", ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentid;
