@@ -22,6 +22,7 @@
         <% TimeOrderSub.forEach(post => { %>
           <a href="/posts/show/<%= post.id %>"><%= post.title %></a>
           <p><%= post.description %></p>
+          <%- include("./helpers/votes.ejs", {post}) %>
 
         <% })%>
       </div>
